@@ -204,6 +204,24 @@
   <script>
     // === CONFIGURACIÓN DEL BACKEND ===
     const BACKEND_URL = "https://tu-usuario-ia-violencia.hf.space/predict"; // CAMBIA ESTO CUANDO SUBAS EL BACKEND
+    // En tu frontend (React/Vue/etc)
+const API_BASE_URL = 'https://camcel-identificador-victima-y-agresor.hf.space';
+
+// Ejemplo de llamada a tu API
+async function hacerPrediccion(videoData) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/tu-endpoint`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ video: videoData })
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Error calling API:', error);
+    }
+}
 
     // === TABS ===
     document.getElementById('upload-tab').addEventListener('click', () => switchTab('upload'));
