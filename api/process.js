@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const hfRes = await fetch('https://camcel-identificador-victima-y-agresor.hf.space/predict', {
+    const hfRes = await fetch('https://camcel-sic.hf.space/predict', {
       method: 'POST',
       body: req.body,  // Pasa el FormData directo
     });
