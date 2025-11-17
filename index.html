@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Identificador Víctima y Agresor</title>
+  <title>SIC - Identificador Víctima y Agresor</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; }
@@ -14,87 +14,86 @@
   </style>
 </head>
 <body class="text-white">
-
   <div class="max-w-4xl mx-auto p-6 space-y-10">
-
-    <!-- Título -->
     <div class="text-center pt-10">
-      <h1 class="text-5xl font-bold mb-3">Identificador Víctima y Agresor</h1>
-      <p class="text-xl opacity-80">Análisis automático de violencia con IA</p>
+      <h1 class="text-5xl font-bold mb-3">SIC - Sistema Inteligente Criminal</h1>
+      <p class="text-xl opacity-80">Detección automática de violencia con IA</p>
     </div>
 
-    <!-- Tabs -->
     <div class="glass rounded-2xl card p-8">
       <div class="flex justify-center gap-4 mb-8">
         <button id="tab-local" class="tab-active px-8 py-3 rounded-xl font-bold text-lg">Subir Video</button>
         <button id="tab-yt" class="tab-inactive px-8 py-3 rounded-xl font-bold text-lg">YouTube</button>
       </div>
 
-      <!-- Subir archivo -->
       <div id="local" class="text-center">
         <input type="file" id="video" accept="video/*" class="hidden">
         <div class="border-4 border-dashed border-white/30 rounded-2xl p-16 cursor-pointer hover:border-white/60 transition"
              onclick="document.getElementById('video').click()">
-          <p class="text-2xl mb-6">Arrastra tu video o haz clic para seleccionar</p>
-          <button class="bg-blue-600 hover:bg-blue-700 px-10 py-4 rounded-xl text-xl font-bold">
-            Seleccionar archivo
-          </button>
+          <p class="text-2xl mb-6">Arrastra o selecciona tu video</p>
+          <button class="bg-blue-600 hover:bg-blue-700 px-10 py-4 rounded-xl text-xl font-bold">Seleccionar</button>
           <p id="filename" class="mt-6 text-green-400 text-xl font-bold"></p>
         </div>
       </div>
 
-      <!-- YouTube -->
       <div id="youtube" class="hidden text-center">
         <input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=..."
                class="w-full px-6 py-5 text-xl bg-white/10 border border-white/30 rounded-xl focus:outline-none focus:border-white">
       </div>
     </div>
 
-    <!-- Botón principal -->
     <div class="text-center">
-      <button id="analyze" class="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 
-                                   text-white font-bold text-3xl py-6 px-20 rounded-2xl shadow-2xl transform hover:scale-105 transition">
-        INICIAR ANÁLISIS CON IA
+      <button id="analyze" class="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold text-3xl py-6 px-20 rounded-2xl shadow-2xl transform hover:scale-105 transition">
+        INICIAR ANÁLISIS
       </button>
     </div>
 
-    <!-- Progreso -->
     <div id="progress" class="hidden glass rounded-2xl card p-10 text-center">
-      <p class="text-2xl mb-6">Procesando con IA...</p>
+      <p class="text-2xl mb-6">Analizando con IA...</p>
       <div class="w-full bg-white/20 rounded-full h-10">
         <div id="bar" class="h-full bg-gradient-to-r from-red-600 to-red-800 rounded-full text-xl font-bold transition-all duration-500" style="width:0%">0%</div>
       </div>
     </div>
 
-    <!-- Resultados -->
     <div id="results" class="hidden space-y-10">
       <div class="glass rounded-2xl card p-10">
         <h2 class="text-3xl font-bold text-center mb-6">Resumen</h2>
         <pre id="summary" class="bg-black/30 p-6 rounded-xl text-lg whitespace-pre-wrap"></pre>
       </div>
       <div class="glass rounded-2xl card p-10">
-        <h2 class="text-3xl font-bold text-center mb-6">Video procesado</h2>
+        <h2 class="text-3xl font-bold text-center mb-6">Video Procesado</h2>
         <video id="output" controls class="w-full rounded-xl shadow-2xl"></video>
       </div>
+      <div class="grid grid-cols-3 gap-6">
+        <div class="glass rounded-2xl p-8 text-center">
+          <div id="aggressors" class="text-6xl font-bold text-red-500">0</div>
+          <p class="text-xl mt-2">Agresores</p>
+        </div>
+        <div class="glass rounded-2xl p-8 text-center">
+          <div id="victims" class="text-6xl font-bold text-blue-500">0</div>
+          <p class="text-xl mt-2">Víctimas</p>
+        </div>
+        <div class="glass rounded-2xl p-8 text-center">
+          <div id="frames" class="text-6xl font-bold text-green-500">0</div>
+          <p class="text-xl mt-2">Frames con violencia</p>
+        </div>
+      </div>
     </div>
-
   </div>
 
   <script>
-    // PROXY QUE FUNCIONA HOY (14 nov 2025)
-    const BACKEND = "https://corsproxy.io/?" + encodeURIComponent("https://camcel-sic.hf.space/predict");
+    // TU SPACE SIC CORREGIDO
+    const BACKEND = "https://camcel-sic.hf.space/predict";
+    // O con proxy propio si lo prefieres: "/api/process"
 
-    // Tabs
     document.getElementById('tab-local').onclick = () => { document.getElementById('local').classList.remove('hidden'); document.getElementById('youtube').classList.add('hidden'); document.getElementById('tab-local').classList.replace('tab-inactive','tab-active'); document.getElementById('tab-yt').classList.replace('tab-active','tab-inactive'); }
-    document.getElementById('tab-yt').onclick   = () => { document.getElementById('youtube').classList.remove('hidden'); document.getElementById('local').classList.add('hidden'); document.getElementById('tab-yt').classList.replace('tab-inactive','tab-active'); document.getElementById('tab-local').classList.replace('tab-active','tab-inactive'); }
+    document.getElementById('tab-yt').onclick = () => { document.getElementById('youtube').classList.remove('hidden'); document.getElementById('local').classList.add('hidden'); document.getElementById('tab-yt').classList.replace('tab-inactive','tab-active'); document.getElementById('tab-local').classList.replace('tab-active','tab-inactive'); }
 
-    // Nombre archivo
     document.getElementById('video').onchange = () => {
       const f = document.getElementById('video').files[0];
-      if (f) document.getElementById('filename').textContent = `✓ ${f.name} (${(f.size/1024/1024).toFixed(1)} MB)`;
+      if (f) document.getElementById('filename').textContent = `Listo: ${f.name} (${(f.size/1024/1024).toFixed(1)} MB)`;
     };
 
-    // Análisis
     document.getElementById('analyze').onclick = async () => {
       const file = document.getElementById('video').files[0];
       const yt = document.getElementById('yt-url').value.trim();
@@ -108,11 +107,11 @@
       document.getElementById('progress').classList.remove('hidden');
       document.getElementById('results').classList.add('hidden');
       let p = 0;
-      const iv = setInterval(() => { p = Math.min(p+12,90); document.getElementById('bar').style.width = p+'%'; document.getElementById('bar').textContent = p+'%'; }, 800);
+      const iv = setInterval(() => { p = Math.min(p + 12, 90); document.getElementById('bar').style.width = p+'%'; document.getElementById('bar').textContent = p+'%'; }, 800);
 
       try {
         const r = await fetch(BACKEND, { method: "POST", body: form });
-        if (!r.ok) throw new Error("Error "+r.status);
+        if (!r.ok) throw new Error("Error " + r.status + " - Revisa logs del Space");
         const data = await r.json();
 
         clearInterval(iv);
@@ -123,13 +122,16 @@
           document.getElementById('progress').classList.add('hidden');
           document.getElementById('results').classList.remove('hidden');
           document.getElementById('summary').textContent = data.resumen || "Análisis completado";
-          if (data.video) document.getElementById('output').src = "data:video/mp4;base64,"+data.video;
+          if (data.video) document.getElementById('output').src = "data:video/mp4;base64," + data.video;
+          document.getElementById('aggressors').textContent = data.agresores || 0;
+          document.getElementById('victims').textContent = data.victimas || 0;
+          document.getElementById('frames').textContent = data.agg_frames || 0;
         }, 1000);
 
       } catch (e) {
         clearInterval(iv);
         document.getElementById('progress').classList.add('hidden');
-        alert("Error del servidor (500)\nArregla en tu Space: deep-sort-realtime==1.3.2");
+        alert("ERROR: " + e.message + "\n\nAsegúrate de haber cambiado:\n- deep-sort-realtime==1.3.2\n- @app.post('/predict')\n- if __name__ == '__main__'");
       }
     };
   </script>
