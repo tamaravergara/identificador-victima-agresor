@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/process",
+      "destination": "https://camcel-sic.hf.space/process" 
+    },
+    {
+      "source": "/api/change_image",
+      "destination": "https://camcel-sic.hf.space/change_image"
+    }
+  ]
+}
